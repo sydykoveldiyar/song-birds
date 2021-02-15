@@ -1,7 +1,8 @@
+import birdsData from "../birdsData";
+
 const EndGame = (props) => {
     const endGame = () => {
-        props.setStep(1);
-        props.setScore(0);
+        window.location.reload();
     }
     return (
         <div className="end-game">

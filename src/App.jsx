@@ -7,25 +7,24 @@ import CurrentAnswer from './components/CurrentAnswer';
 import EndGame from './components/EndGame';
 import Next from './components/Next';
 import birdsData from './birdsData'
-import success from "./audios/ff.mp3";
-import error from "./audios/error.mp3"
-
-const sucessAudio = new Audio(success);
-const errorAudio = new Audio(error);
 
 function App() {
   const [step, setStep] = useState(1);
+  useEffect(() => {
+    setCurrentQuestion();
+  }, [step]);
+
   const [question, setQuestion] = useState({});
   const [answer, setAnswer] = useState({});
   const [isRight, setIsRight] = useState(false);
   const [score, setScore] = useState(0);
   const [mistakes, setMistakes] = useState(0);
-
-  let currentAnswers = birdsData[step - 1];
-
-  useEffect(() => {
-    setCurrentQuestion();
-  }, [step]);
+  
+  let currentAnswers = birdsData[0];
+  if(step < 7){
+    currentAnswers = birdsData[step - 1];
+    console.log(currentAnswers);
+  }
 
   useEffect(() => {
     checkAnswer(answer);
@@ -42,12 +41,10 @@ function App() {
         setIsRight(true)
         setScore(score + (5 - mistakes));
         setMistakes(0);
-        sucessAudio.play();
       }
       else {
         setIsRight(false);
         setMistakes(mistakes + 1);
-        errorAudio.play();
       }
     }
   }
@@ -61,7 +58,7 @@ function App() {
   return (
     <div className="container">
       <Header step={step} score={score} />
-      { step < 6
+      { step <= 6
         ?
         <>
           <Question question={question} isRight={isRight} />
@@ -71,7 +68,7 @@ function App() {
           </div>
         <Next currentStep={step} setStep={setStep} isRight={isRight} setIsRight={setIsRight} setAnswer={setAnswer} setStep={setStep} />
         </>
-        : <EndGame score={score} setStep={setStep} setScore={setScore}/>
+        : <EndGame score={score} setStep={setStep} setScore={setScore} setAnswer={setAnswer}/>
       }
     </div>
   );

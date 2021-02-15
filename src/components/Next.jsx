@@ -1,7 +1,11 @@
+import birdsData from '../birdsData';
+
 const Next = (props) => {
     const updateStep = () => {
         props.setStep(props.currentStep + 1);
         props.setIsRight(false);
+        props.setAnswer({});
+        birdsData.forEach(bd => bd.forEach(b => b.isChecked = false))
     }
 
     return (
